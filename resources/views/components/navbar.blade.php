@@ -37,24 +37,34 @@
                             @endif
                             @endauth
 
-
                         </div>
                     </div>
                 </div>
                 <div class="flex-1 flex justify-end px-2 lg:ml-6 lg:justify-end">
                     @auth
-                    <a href="#" class="ml-4 px-3 py-2 rounded-md text-sm leading-5  text-gray-800
+                    <a href="#" class="flex ml-4 px-3 py-2 rounded-md text-sm leading-5  text-gray-800 outline outline-offset-2 outline-gray-500
                         font-semibold hover:bg-yellow-500 hover:text-white transition duration-150 ease-in-out
                         cursor-pointer focus:outline-none focus:text-white focus:bg-gray-700"
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit()">Log
-                        Out</a>
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit()"><svg
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                        </svg>
+                        Log Out</a>
                     <form action="{{route('logout')}}" id="logout-form" method="post" style="display: none">
                         <input type="hidden" name="_token" value="{{csrf_token()}}">
                     </form>
                     @else
-                    <a href="{{route('login')}}" class="ml-4 px-3 py-2 rounded-md text-sm leading-5  text-blue-800
+                    <a href="{{route('login')}}" class="md:flex items-center ml-4 px-3 py-2 rounded-md text-sm leading-5  text-blue-800
                     font-semibold hover:bg-yellow-500 hover:text-white transition duration-150 ease-in-out
-                    cursor-pointer focus:outline-none focus:text-white focus:bg-gray-700">Login</a>
+                    cursor-pointer focus:outline-none focus:text-white focus:bg-gray-700"> <svg
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-6 h-6 mr-1">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                        </svg>
+                        Login</a>
                     @endauth
 
                 </div>

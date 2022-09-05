@@ -47,10 +47,12 @@
                     {{ __('Forgot your password?') }}
                 </a>
                 @endif
-
-                <x-button class="ml-3">
+                <button type="submit" class=" mx-3 p-3 bg-blue-600 text-white rounded-md w-40 shadow-sm">
+                    Login
+                </button>
+                {{-- <x-button class="ml-3 p-2">
                     {{ __('Log in') }}
-                </x-button>
+                </x-button> --}}
             </div>
         </form>
     </x-auth-card>

@@ -61,12 +61,14 @@
                 <img src="{{asset('images/pdf.png')}}" class="w-20 h-20 m-auto my-6" alt="">
             </div>
             <h3 class="font-semibold my-4">{{$document->title}}</h3>
+
             <div class="flex  space-x-1 my-10 m-auto justify-center">
+                @auth
                 <a href="{{route('view',$document->slug)}}" class="bg-yellow-300
                     hover:text-gray-500 p-2 rounded-full w-32 shadow-sm font-semibold text-sm ">
                     View
                 </a>
-                @auth
+
                 <a href="{{route('download',$document->slug)}}" class="bg-blue-200 p-2 rounded-full w-32 font-semibold">
                     Download</a>
                 @endauth

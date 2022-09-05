@@ -5,7 +5,7 @@
         <div class="rounded-t mb-0 px-4 py-3 border-0">
             <div class="flex flex-wrap items-center">
                 <div class="relative w-full px-4 max-w-full flex-grow flex-1">
-                    <h3 class="font-bold text-blue-700 text-xl">Data Document</h3>
+                    <h3 class="font-bold text-blue-400 text-xl">Document Sistem Penjamin Mutu</h3>
                 </div>
                 <div class="relative w-full px-4 max-w-full flex-grow flex-1 text-right">
                     <a href="{{route('add-document')}}"
@@ -70,7 +70,8 @@
                         </td>
                         <td class="border-t-0 px-6 align-center border-l-0 border-r-0 text-sm whitespace-nowrap p-4">
                             <div class="md:flex space-x-2">
-                                <a href="#" class="text-gray-600 font-semibold bg-yellow-300 p-2 rounded-full"><svg
+                                <a href="{{route('edit-document',$document->id4)}}"
+                                    class="text-gray-600 font-semibold bg-yellow-300 p-2 rounded-full"><svg
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
                                         <path stroke-linecap="round" stroke-linejoin="round"

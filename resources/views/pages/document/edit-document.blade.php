@@ -9,7 +9,7 @@
                 <label for="" class="font-semibold text-gray-700 text-sm">Judul Dokumen</label>
                 <input
                     class="appearance-none  w-full  bg-gray-100 text-gray-700 rounded py-3 px-4 mb-3 border border-gray-200 leading-tight focus:outline-none focus:bg-white focus:border-teal-300 sm:text-sm"
-                    id="grid-first-name" type="text" name="title">
+                    id="grid-first-name" type="text" name="title" value="{{$document->title}}">
             </div>
 
             <div class="my-1">
@@ -18,7 +18,8 @@
                     class=" appearance-none  w-full text-sm  bg-gray-100 border mb-3 border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-blue-300"
                     id="grid-state" name="unit_id">
                     @foreach ($units as $unit)
-                    <option value="{{$unit->id}}">{{$unit->name}}</option>
+                    <option value="{{$unit->id}}" {{$document->unit_id == $unit->id ?'selected':''}}>{{$unit->name}}
+                    </option>
                     @endforeach
 
                 </select>
@@ -31,7 +32,8 @@
                     id="grid-state" name="type_id">
                     <option value="">Choose Type</option>
                     @foreach ($types as $type)
-                    <option value="{{$type->id}}">{{$type->name}}</option>
+                    <option value="{{$type->id}}" {{$document->type_id == $type->id ?'selected':''}}>{{$type->name}}
+                    </option>
                     @endforeach
                 </select>
             </div>
@@ -43,7 +45,7 @@
             </div>
             <div class="my-1">
                 <button type="submit"
-                    class="w-full text-sm bg-blue-600 p-3 rounded-md block font-semibold text-white m-auto">Save
+                    class="w-full text-sm bg-blue-600 p-3 rounded-md block font-semibold text-white m-auto">Update
                     Document</button>
             </div>
         </form>

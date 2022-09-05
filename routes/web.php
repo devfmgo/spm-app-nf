@@ -29,6 +29,7 @@ Route::controller(DocumentController::class)->group(function () {
         return "Download Page";
     })->name('download');
     Route::get('view/{slug}', 'show')->name('view');
+    Route::get('document/{id}', 'edit')->name('edit-document');
 });
 Route::controller(UnitController::class)->group(function () {
     Route::get('unit', 'index')->name('index-unit');

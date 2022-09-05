@@ -135,7 +135,10 @@ class DocumentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $units = Unit::all();
+        $types = Type::all();
+        $document = Document::findOrFail($id);
+        return view('pages.document.edit-document', compact('document', 'units', 'types'));
     }
 
     /**
