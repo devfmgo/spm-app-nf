@@ -47,7 +47,7 @@
                     {{ __('Forgot your password?') }}
                 </a>
                 @endif
-                <button type="submit" class=" mx-3 p-3 bg-blue-600 text-white rounded-md w-40 shadow-sm">
+                <button type="submit" class=" mx-3 p-3 bg-blue-600 text-white rounded-md w-40 shadow-sm font-medium">
                     Login
                 </button>
                 {{-- <x-button class="ml-3 p-2">

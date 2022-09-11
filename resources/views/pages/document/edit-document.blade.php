@@ -1,10 +1,11 @@
 @extends('layouts.app')
 @section('content')
 <div class="container">
-    <h3 class="text-center font-semibold text-gray-700 md:text-3xl sm:text-xl my-5">Add New Document</h3>
+    <h3 class="text-center font-semibold text-gray-700 md:text-3xl sm:text-xl my-5">Edit Document</h3>
     <div class="md:w-96 shadow-xl p-5 m-auto ">
-        <form action="{{route('save-document')}}" method="post" enctype="multipart/form-data">
+        <form action="{{route('update-document',$document->id)}}" method="post" enctype="multipart/form-data">
             @csrf
+            @method('put')
             <div class="my-1">
                 <label for="" class="font-semibold text-gray-700 text-sm">Judul Dokumen</label>
                 <input

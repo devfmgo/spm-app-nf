@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Type;
 use App\Models\Unit;
+use App\Models\Document;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\Document;
+use Illuminate\Support\Facades\Storage;
 
 class DocumentController extends Controller
 {
@@ -51,8 +52,17 @@ class DocumentController extends Controller
      * **/
     public function document_data()
     {
-        $documents = Document::with('unit', 'type')->get();
-        return view('pages.document.data-document', compact('documents'));
+        if (request('id') == null) {
+            $documents = Document::with('unit', 'type')->paginate(10);
+        } elseif (request('id') == "all") {
+            $documents = Document::with('unit', 'type')->paginate(10);
+        } else {
+            $documents = Document::with('unit', 'type')->onlyTrashed()->paginate(10);
+        }
+        $request = request('id');
+        $softDelete = Document::onlyTrashed()->count();
+
+        return view('pages.document.data-document', compact('documents', 'softDelete', 'request'));
     }
     /**
      * Show the form for creating a new resource.
@@ -101,7 +111,7 @@ class DocumentController extends Controller
         ]);
 
         $uploadedFile = $request->file;
-        $filename = $request->unit_id . "_" . $request->type_id . "_" . date('Y-m-d H:i:s') . "_" . $request->file('file')->getClientOriginalName();
+        $filename = $request->unit_id . "_" . $request->type_id . "_" . $request->title . "." . $request->file('file')->getClientOriginalExtension();
         $simpan = $uploadedFile->storeAs('public/' . $this->folder($request->type_id), $filename);
         $data = new Document();
         $data->title = $request->title;
@@ -113,7 +123,6 @@ class DocumentController extends Controller
             return redirect('document');
         }
         return back();
-        // dd($request->unit_id . "_" . $request->type_id . "_" . date('Y-m-d') . "_" . $request->file('file')->getClientOriginalName());
     }
 
     /**
@@ -150,7 +159,25 @@ class DocumentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'file' => 'required|mimes:pdf|max:1000',
+            'title' => 'required',
+            'unit_id' => 'required',
+            'type_id' => 'required'
+        ]);
+        $uploadedFile = $request->file;
+        $filename = $request->unit_id . "_" . $request->type_id . "_" . $request->title . "." . $request->file('file')->getClientOriginalExtension();
+        $simpan = $uploadedFile->storeAs('public/' . $this->folder($request->type_id), $filename);
+        $data = new Document();
+        $data->title = $request->title;
+        $data->unit_id = $request->unit_id;
+        $data->type_id = $request->type_id;
+        $data->slug = Str::slug($request->title);
+        $data->file_doc = $filename;
+        if (Document::find($id)->update($request->all())) {
+            return redirect('document');
+        }
+        return back();
     }
 
     /**
@@ -159,8 +186,40 @@ class DocumentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    public function confirmDelete($id)
+    {
+        return view('pages.document.confirm-delete', compact('id'));
+    }
     public function destroy($id)
     {
-        //
+        Document::find($id)->delete();
+        return redirect()->route('data-document', 'all');
+    }
+    public function deleteAll($id)
+    {
+        // script for delete dat with file 
+        $document = Document::with('type')->where('id', $id)->first();
+        $folder = $document->type->name;
+        $file  = $document->file_doc;
+        Storage::disk('public')->delete($folder . '/' . $file);
+    }
+
+    //  function restore or delete data permanent 
+    public function restoreDelete($act, $id)
+    {
+        if ($act == "restore") {
+            Document::withTrashed()->where('id', $id)->restore();
+            return redirect()->route('data-document', 'all');
+        } else {
+            // script for delete dat with file 
+            $document = Document::with('type')->where('id', $id)->first();
+            $folder = $document->type->name;
+            $file  = $document->file_doc;
+            Storage::disk('public')->delete($folder . '/' . $file);
+            //Delete Permanent
+            Document::where('id', $id)->forceDelete();
+            return redirect()->route('data-document', 'all');
+        }
+        return redirect()->route('data-document', 'all');
     }
 }

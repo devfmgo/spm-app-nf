@@ -25,7 +25,7 @@
                                 Document SPM</a>
                             @auth
                             @if (Auth::user()->is_admin)
-                            <a href="{{route('data-document')}}"
+                            <a href="{{route('data-document','all')}}"
                                 class="{{Request::path()=='data-document' ? 'active':''}} ml-4 px-3 py-2 rounded-md text-sm leading-5  text-gray-800 font-semibold hover:bg-yellow-500 hover:text-white transition duration-150 ease-in-out cursor-pointer focus:outline-none focus:text-white focus:bg-gray-700 flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor"
@@ -42,7 +42,7 @@
                 </div>
                 <div class="flex-1 flex justify-end px-2 lg:ml-6 lg:justify-end">
                     @auth
-                    <a href="#" class="flex ml-4 px-3 py-2 rounded-md text-sm leading-5  text-gray-800 outline outline-offset-2 outline-gray-500
+                    <a href="#" class="flex ml-4 px-3 py-2 rounded-md text-sm leading-5  text-gray-800 
                         font-semibold hover:bg-yellow-500 hover:text-white transition duration-150 ease-in-out
                         cursor-pointer focus:outline-none focus:text-white focus:bg-gray-700"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit()"><svg
@@ -89,17 +89,17 @@
         <div x-show="menu" class="block md:hidden">
             <div class="px-2 pt-2 pb-3">
                 <a href="#"
-                    class="mt-1 block px-3 py-2 rounded-md text-white font-semibold  hover:bg-yellow-500 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Location
+                    class="mt-1 block px-3 py-2 rounded-md text-white font-semibold  hover:bg-yellow-500 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Home
                 </a>
                 <a href="#"
-                    class="mt-1 block px-3 py-2 rounded-md text-white font-semibold  hover:bg-yellow-500 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Article
+                    class="mt-1 block px-3 py-2 rounded-md text-white font-semibold  hover:bg-yellow-500 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Document
+                    SPM
                 </a>
                 <a href="#"
-                    class="mt-1 block px-3 py-2 rounded-md text-white font-semibold  hover:bg-yellow-500 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Recipe
+                    class="mt-1 block px-3 py-2 rounded-md text-white font-semibold  hover:bg-yellow-500 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Database
+                    Document
                 </a>
-                <a href="#"
-                    class="mt-1 block px-3 py-2 rounded-md text-white font-semibold  hover:bg-yellow-500 focus:outline-none focus:text-white focus:bg-gray-700 transition duration-150 ease-in-out">Promo
-                </a>
+
             </div>
         </div>
     </div>
