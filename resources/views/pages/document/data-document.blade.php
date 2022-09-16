@@ -103,7 +103,7 @@
                             <div class="flex space-x-1">
 
                                 <a href="{{route('resdel',['restore',$document->id])}}" alt="Restore Data"
-                                    class="flex space-x-1 items-center text-gray-100 bg-green-500 p-2 rounded-full text-center  font-semibold block hover:bg-green-600">
+                                    class="flex space-x-1 items-center text-gray-100 bg-green-500 p-2 rounded-full text-center  font-semibold sm:block hover:bg-green-600">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -112,7 +112,7 @@
                                     <span>Restore</span>
                                 </a>
                                 <a href="{{route('resdel',['delete',$document->id])}}"
-                                    class="flex items-center bg-red-500 text-gray-100 p-3 rounded-full text-center  font-semibold block hover:bg-red-600"><svg
+                                    class="flex items-center bg-red-500 text-gray-100 p-3 rounded-full text-center  font-semibold sm:block hover:bg-red-600"><svg
                                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                         stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round"
