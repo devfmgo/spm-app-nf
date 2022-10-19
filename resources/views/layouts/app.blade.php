@@ -11,6 +11,7 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{asset('css/main.css')}}">
+
     @vite('resources/css/app.css')
 
 </head>
@@ -25,5 +26,6 @@
         </footer>
     </div>
 </body>
+<script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
 
 </html>

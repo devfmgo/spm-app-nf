@@ -49,8 +49,11 @@ Route::middleware([IsAdmin::class])->group(function () {
     Route::controller(DocumentController::class)->group(function () {
         // Route::get('document', 'index')->name('index-document');
         Route::get('data-document/{id}', 'document_data')->name('data-document');
+        Route::get('data-document/filter/{id}', 'filter')->name('filter');
+        Route::get('search', 'search_document')->name('search-document');
         Route::get('add-document', 'create')->name('add-document');
         Route::get('act/{act}/{id}', 'restoreDelete')->name('resdel');
+        Route::get('act/{id}', 'deleteAll')->name('permanent-delete');
         Route::post('save-document', 'store')->name('save-document');
         Route::get('download/{slug}', function () {
             return "Download Page";
@@ -69,7 +72,15 @@ Route::middleware([IsAdmin::class])->group(function () {
         Route::get('deleteAll/{id}', 'deleteAll')->name('deleteAll');
     });
 });
-
-
-
+Route::get('/clear-cache', function () {
+    Artisan::call('cache:clear');
+    Artisan::call('route:cache');
+    Artisan::call('config:cache');
+    Artisan::call('view:clear');
+    return 'View cache has been cleared';
+});
+Route::get('/storage-link', function () {
+    Artisan::call('storage:link');
+    return 'Storage Link';
+});
 require __DIR__ . '/auth.php';

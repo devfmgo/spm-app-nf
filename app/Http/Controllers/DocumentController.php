@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
+
 class DocumentController extends Controller
 {
     /**
@@ -16,42 +17,43 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         $units = Unit::all();
         $types = Type::all();
         $countDocument = Document::all();
-        $limit = 8;
+        $limit = 12;
         // filter all data 
         if ($countDocument) {
-            $documents = Document::with('unit', 'type')->paginate($limit);
+            $documents = Document::with('unit', 'type')->latest()->paginate($limit);
         }
         // filter berdasarkan unit 
         if (request('uid') > 1) {
-            $documents = Document::with('unit', 'type')->where('unit_id', request('uid'))->paginate($limit);
+            $documents = Document::with('unit', 'type')->where('unit_id', request('uid'))->latest()->paginate($limit);
         }
 
-        // filter berdasarkan unit dan type 
+
         if (request('type') > 0) {
-            $documents = Document::with('unit', 'type')->where('type_id', request('type'))->paginate($limit);
+            $documents = Document::with('unit', 'type')->where('type_id', request('type'))->latest()->paginate($limit);
         }
-        // filter berdasarkan unit dan type 
+
         if (request('uid') > 1 && request('type') > 0) {
-            $documents = Document::with('unit', 'type')->where('unit_id', request('uid'))->where('type_id', request('type'))->paginate($limit);
+            $documents = Document::with('unit', 'type')->where('unit_id', request('uid'))->where('type_id', request('type'))->latest()->paginate($limit);
         }
 
         // filter berdasarkan search
         if (request('search')) {
-            $documents = Document::with('unit', 'type')->where('title', 'LIKE', '%' . request('search') . '%')->paginate($limit);
+            $documents = Document::with('unit', 'type')->where('title', 'LIKE', '%' . request('search') . '%')->latest()->paginate($limit);
         }
 
         return view('pages.document.index', compact('documents', 'units', 'types'));
     }
-    /**
-     * Data Document
-     * **/
+    /** Data Document **/
     public function document_data()
     {
+
+
         if (request('id') == null) {
             $documents = Document::with('unit', 'type')->paginate(10);
         } elseif (request('id') == "all") {
@@ -59,11 +61,40 @@ class DocumentController extends Controller
         } else {
             $documents = Document::with('unit', 'type')->onlyTrashed()->paginate(10);
         }
+
         $request = request('id');
         $softDelete = Document::onlyTrashed()->count();
-
-        return view('pages.document.data-document', compact('documents', 'softDelete', 'request'));
+        $unit = Unit::skip(1)->take(10)->get();
+        $result = 0;
+        return view('pages.document.data-document', compact('documents', 'softDelete', 'request', 'unit', 'result'));
     }
+
+    public function filter($id)
+    {
+        $idFilter = explode(',', $id);
+        $request = request('id');
+        $documents = Document::with('unit', 'type')->whereIn('unit_id', $idFilter)->paginate(10);
+        $softDelete = Document::onlyTrashed()->count();
+        $unit = Unit::all();
+        $result = 0;
+        return view('pages.document.data-document', compact('documents', 'softDelete', 'request', 'unit', 'result'));
+    }
+
+    /** Search document */
+
+    public function search_document()
+    {
+
+        $q = request('find');
+        $documents = Document::with('unit', 'type')->where('title', 'like', '%' . $q . '%')->paginate(10);
+        $softDelete = Document::onlyTrashed()->count();
+        $unit = Unit::all();
+        $request = request('id');
+        $result = Document::where('title', 'like', '%' . $q . '%')->count('id');
+
+        return view('pages.document.data-document', compact('documents', 'softDelete', 'request', 'unit', 'result'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -104,7 +135,7 @@ class DocumentController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'file' => 'required|mimes:pdf|max:1000',
+            'file' => 'mimes:pdf|max:3000',
             'title' => 'required',
             'unit_id' => 'required',
             'type_id' => 'required'
@@ -120,7 +151,7 @@ class DocumentController extends Controller
         $data->slug = Str::slug($request->title);
         $data->file_doc = $filename;
         if ($data->save()) {
-            return redirect('document');
+            return redirect('data-document/all');
         }
         return back();
     }
@@ -160,7 +191,7 @@ class DocumentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'file' => 'required|mimes:pdf|max:1000',
+            'file' => 'required|mimes:pdf|max:3000',
             'title' => 'required',
             'unit_id' => 'required',
             'type_id' => 'required'
@@ -175,6 +206,7 @@ class DocumentController extends Controller
         $data->slug = Str::slug($request->title);
         $data->file_doc = $filename;
         if (Document::find($id)->update($request->all())) {
+            // toastr()->success('Data has been update success!');
             return redirect('document');
         }
         return back();
@@ -190,18 +222,27 @@ class DocumentController extends Controller
     {
         return view('pages.document.confirm-delete', compact('id'));
     }
+
     public function destroy($id)
     {
         Document::find($id)->delete();
         return redirect()->route('data-document', 'all');
     }
+
     public function deleteAll($id)
     {
-        // script for delete dat with file 
+        // dd($id);
+        // script for delete data with file 
         $document = Document::with('type')->where('id', $id)->first();
         $folder = $document->type->name;
         $file  = $document->file_doc;
         Storage::disk('public')->delete($folder . '/' . $file);
+        //Delete Permanent
+        Document::where('id', $id)->forceDelete();
+        return redirect()->route(
+            'data-document',
+            'all'
+        );
     }
 
     //  function restore or delete data permanent 
@@ -210,16 +251,17 @@ class DocumentController extends Controller
         if ($act == "restore") {
             Document::withTrashed()->where('id', $id)->restore();
             return redirect()->route('data-document', 'all');
-        } else {
-            // script for delete dat with file 
-            $document = Document::with('type')->where('id', $id)->first();
-            $folder = $document->type->name;
-            $file  = $document->file_doc;
-            Storage::disk('public')->delete($folder . '/' . $file);
-            //Delete Permanent
-            Document::where('id', $id)->forceDelete();
-            return redirect()->route('data-document', 'all');
         }
+        // else {
+        //     // script for delete data with file 
+        //     $document = Document::with('type')->where('id', $id)->first();
+        //     $folder = $document->type->name;
+        //     $file  = $document->file_doc;
+        //     Storage::disk('public')->delete($folder . '/' . $file);
+        //     //Delete Permanent
+        //     Document::where('id', $id)->forceDelete();
+        //     return redirect()->route('data-document', 'all');
+        // }
         return redirect()->route('data-document', 'all');
     }
 }

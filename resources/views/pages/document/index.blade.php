@@ -50,7 +50,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-8 w-full mt-14">
 
         @foreach ($documents as $document)
-        <div class="flex-row bg-white shadow-lg text-center p-4 hover:translate-y-2 duration-200">
+        <div class="flex flex-col w-1/3 bg-white shadow-lg text-center p-4 hover:translate-y-2 duration-200">
             <div class="flex justify-items-center space-x-1 my-1">
                 <span class="bg-gray-200 text-gray-50 p-1 shadow-sm rounded-lg text-xs font-semibold"
                     style="background-color: {{$document->unit->color}}">{{$document->unit->name}}</span>
@@ -60,17 +60,21 @@
             <div>
                 <img src="{{asset('images/pdf.png')}}" class="w-20 h-20 m-auto my-6" alt="">
             </div>
-            <h3 class="font-semibold my-4">{{$document->title}}</h3>
+            <h3 class="font-semibold my-4 flex-1">{{$document->title}}</h3>
 
-            <div class="flex  space-x-1 my-10 m-auto justify-center">
+            <div class=" relative space-x-1 my-10 m-auto mt-2">
                 @auth
-                <a href="{{route('view',$document->slug)}}" class="bg-yellow-300
+                <div class="flex justify-center  space-x-2">
+                    <a href="{{route('view',$document->slug)}}" class="bg-yellow-300
                     hover:text-gray-500 p-2 rounded-full w-32 shadow-sm font-semibold text-sm ">
-                    View
-                </a>
+                        View
+                    </a>
 
-                <a href="{{route('download',$document->slug)}}" class="bg-blue-200 p-2 rounded-full w-32 font-semibold">
-                    Download</a>
+                    <a href="{{route('download',$document->slug)}}"
+                        class="bg-blue-200 p-2 rounded-full w-32 font-semibold">
+                        Download</a>
+                </div>
+
                 @endauth
 
             </div>
