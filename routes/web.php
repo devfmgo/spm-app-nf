@@ -43,7 +43,15 @@ Route::get('document', [DocumentController::class, 'index'])->name('index-docume
 
 Route::middleware([IsAdmin::class])->group(function () {
     // Router User Controller 
-    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::controller(UserController::class)->group(function () {
+        Route::get('users', 'index')->name('users');
+        Route::get('/users/{id}', 'edit')->name('users.edit');
+        Route::put('/users/{id}', 'update')->name('users.update');
+        Route::delete('/users/{id}', 'destroy')->name('users.destroy');
+        Route::get('/restore/{id}', 'restore')->name('users.restore');
+        Route::get('user/trash', 'trash')->name('users.trash');
+        Route::get('/user/{id}', 'empty')->name('users.empty');
+    });
 
     //Document Controller 
     Route::controller(DocumentController::class)->group(function () {

@@ -63,7 +63,7 @@
                     <form action="{{route('search-document')}}" method="get" class="mt-8">
                         <div class="flex justify-end my-1">
                             <input type="search" id="search-dropdown" name="find"
-                                class="mr-1 rounded-lg w-1/2 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-l-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                                class="mr-1 rounded-lg w-1/2 text-sm text-gray-900 bg-gray-50 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "
                                 placeholder="Search Judul Documents...." autocomplete="off">
                             <button type="submit" class="text-sm space-x-1 font-semibold text-indigo-100"><svg
                                     class="w-6 h-6 text-indigo-300" fill="none" stroke="currentColor"
@@ -113,12 +113,12 @@
                 <tbody>
                     @foreach ($documents as $document)
 
-                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <tr class="bg-white border-b ">
 
                         <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm whitespace-nowrap p-2 ">
                             {{$loop->iteration}}
                         </td>
-                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm text-gray-50 font-semibold whitespace-nowrap p-2"
+                        <td class="border-t-0 px-6 align-middle border-l-0 border-r-0 text-sm text-gray-50 font-semibold whitespace-nowrap p-2 text-center"
                             style="background-color:{!!$document->unit->color!!};">
                             {{$document->unit->name}}
                         </td>

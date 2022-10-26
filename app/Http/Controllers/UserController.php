@@ -14,10 +14,19 @@ class UserController extends Controller
      */
     public function index()
     {
+
+
         $users = User::paginate(10);
-        return view('pages.user.index', compact('users'));
+        $delete = User::onlyTrashed()->count();
+        return view('pages.user.index', compact('users', 'delete'));
     }
 
+    public function trash()
+    {
+        $users = User::onlyTrashed()->paginate(10);
+        $delete = User::onlyTrashed()->count();
+        return view('pages.user.index', compact('users', 'delete'));
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -58,7 +67,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = User::find($id);
+        return view('pages.user.edit', compact('data'));
     }
 
     /**
@@ -70,7 +80,11 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if (User::find($id)->update($request->all())) {
+            toastr()->success('Data Succes Updated', 'Success');
+            return redirect()->route('users');
+        }
+        return back();
     }
 
     /**
@@ -81,6 +95,27 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if (User::find($id)->delete()) {
+            toastr()->success('Data Succes Deleted', 'Success');
+            return redirect()->route('users');
+        }
+        return back();
+    }
+
+    public function restore($id)
+    {
+        if (User::withTrashed()->where('id', $id)->restore()); {
+            toastr()->success('Data Succes Resore', 'Success');
+            return redirect()->route('users');
+        }
+        return back();
+    }
+
+    public function empty($id)
+    {
+        if (User::where('id', $id)->forceDelete()) {
+            toastr()->success('Data Succes Delete', 'Success');
+            return redirect()->route('users');
+        }
     }
 }
