@@ -231,12 +231,12 @@ class DocumentController extends Controller
 
     public function deleteAll($id)
     {
-        // dd($id);
+
         // script for delete data with file 
-        $document = Document::with('type')->where('id', $id)->first();
+        $document = Document::with('type')->onlyTrashed()->find($id);
         $folder = $document->type->name;
         $file  = $document->file_doc;
-        Storage::disk('public')->delete($folder . '/' . $file);
+        Storage::delete('public/' . $folder . '/' . $file);
         //Delete Permanent
         Document::where('id', $id)->forceDelete();
         return redirect()->route(

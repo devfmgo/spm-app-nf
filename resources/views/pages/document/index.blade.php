@@ -50,7 +50,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-8 w-full mt-14">
 
         @foreach ($documents as $document)
-        <div class="flex flex-col w-1/3 bg-white shadow-lg text-center p-4 hover:translate-y-2 duration-200">
+        <div class="flex flex-col w-full bg-white shadow-lg text-center p-4 hover:translate-y-2 duration-200">
             <div class="flex justify-items-center space-x-1 my-1">
                 <span class="bg-gray-200 text-gray-50 p-1 shadow-sm rounded-lg text-xs font-semibold"
                     style="background-color: {{$document->unit->color}}">{{$document->unit->name}}</span>

@@ -15,7 +15,6 @@ class UserController extends Controller
     public function index()
     {
 
-
         $users = User::paginate(10);
         $delete = User::onlyTrashed()->count();
         return view('pages.user.index', compact('users', 'delete'));
