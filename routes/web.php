@@ -63,18 +63,14 @@ Route::middleware([IsAdmin::class])->group(function () {
         Route::get('act/{act}/{id}', 'restoreDelete')->name('resdel');
         Route::get('act/{id}', 'deleteAll')->name('permanent-delete');
         Route::post('save-document', 'store')->name('save-document');
-        Route::get('download/{slug}', function () {
-            return "Download Page";
-        })->name('download');
+        Route::get('download/{slug}', 'download_document')->name('download');
         Route::get('view/{slug}', 'show')->name('view');
         Route::get(
             'document/{id}',
             'edit'
         )->name('edit-document');
-        Route::put(
-            'document/{id}',
-            'update'
-        )->name('update-document');
+        Route::put('document/{id}', 'update')->name('update-document');
+        Route::post('data-document/update', 'updateDocument')->name('updateDocument');
         Route::get('confirm-delete/{slug}', 'confirmDelete')->name('confirm-delete');
         Route::delete('delete/{id}', 'destroy')->name('delete');
         Route::get('deleteAll/{id}', 'deleteAll')->name('deleteAll');
@@ -86,6 +82,13 @@ Route::get('/clear-cache', function () {
     Artisan::call('config:cache');
     Artisan::call('view:clear');
     return 'View cache has been cleared';
+});
+
+Route::get('/reset', function () {
+    Artisan::call('route:clear');
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('config:cache');
 });
 Route::get('/storage-link', function () {
     Artisan::call('storage:link');

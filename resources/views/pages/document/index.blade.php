@@ -61,7 +61,6 @@
                 <img src="{{asset('images/pdf.png')}}" class="w-20 h-20 m-auto my-6" alt="">
             </div>
             <h3 class="font-semibold my-4 flex-1">{{$document->title}}</h3>
-
             <div class=" relative space-x-1 my-10 m-auto mt-2">
                 @auth
                 <div class="flex justify-center  space-x-2">

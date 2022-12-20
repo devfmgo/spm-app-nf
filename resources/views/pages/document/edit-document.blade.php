@@ -39,15 +39,15 @@
                 </select>
             </div>
 
-            <div class="my-1">
+            {{-- <div class="my-1">
                 <label for="" class="font-semibold text-gray-700 text-sm">Upload Document</label>
                 <input type="file" name="file" id=""
                     class="block appearance-none  w-full  bg-gray-100 border border-gray-200 mb-3 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-teal-300 text-sm">
-            </div>
+            </div> --}}
             <div class="my-1">
                 <button type="submit"
                     class="w-full text-sm bg-blue-600 p-3 rounded-md block font-semibold text-white m-auto">Update
-                    Document</button>
+                </button>
             </div>
         </form>
     </div>

@@ -191,27 +191,44 @@ class DocumentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'file' => 'required|mimes:pdf|max:3000',
+            // 'file' => 'required|mimes:pdf|max:3000',
             'title' => 'required',
             'unit_id' => 'required',
             'type_id' => 'required'
         ]);
-        $uploadedFile = $request->file;
-        $filename = $request->unit_id . "_" . $request->type_id . "_" . $request->title . "." . $request->file('file')->getClientOriginalExtension();
-        $simpan = $uploadedFile->storeAs('public/' . $this->folder($request->type_id), $filename);
-        $data = new Document();
+        // $uploadedFile = $request->file;
+        // $filename = $request->unit_id . "_" . $request->type_id . "_" . $request->title . "." . $request->file('file')->getClientOriginalExtension();
+        // $simpan = $uploadedFile->storeAs('public/' . $this->folder($request->type_id), $filename);
+        $data = Document::find($id);
         $data->title = $request->title;
         $data->unit_id = $request->unit_id;
         $data->type_id = $request->type_id;
         $data->slug = Str::slug($request->title);
-        $data->file_doc = $filename;
-        if (Document::find($id)->update($request->all())) {
-            // toastr()->success('Data has been update success!');
-            return redirect('document');
+        // $data->file_doc = $filename;
+
+        if ($data->save()) {
+            toastr()->success('Data has been update success!');
+            return redirect('data-document/all');
         }
         return back();
     }
 
+    public function updateDocument(Request $request)
+    {
+        $request->validate([
+            'file' => 'mimes:pdf|max:3000',
+        ]);
+        $data = Document::find(request('document_id'));
+        $uploadedFile = $request->file;
+        $filename = $data->unit_id . "_" . $data->type_id . "_" . $data->title . "." . $request->file('file')->getClientOriginalExtension();
+        $simpan = $uploadedFile->storeAs('public/' . $this->folder($data->type_id), $filename);
+        $data->file_doc = $filename;
+        if ($data->save()) {
+            toastr()->success('Success', 'Data has been update success!');
+            return redirect('data-document/all');
+        }
+        return back();
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -252,16 +269,17 @@ class DocumentController extends Controller
             Document::withTrashed()->where('id', $id)->restore();
             return redirect()->route('data-document', 'all');
         }
-        // else {
-        //     // script for delete data with file 
-        //     $document = Document::with('type')->where('id', $id)->first();
-        //     $folder = $document->type->name;
-        //     $file  = $document->file_doc;
-        //     Storage::disk('public')->delete($folder . '/' . $file);
-        //     //Delete Permanent
-        //     Document::where('id', $id)->forceDelete();
-        //     return redirect()->route('data-document', 'all');
-        // }
+
         return redirect()->route('data-document', 'all');
+    }
+
+    public function download_document($slug)
+    {
+
+        $cariDocument = Document::where('slug', $slug)->get()->first();
+
+        $folder = $this->folder($cariDocument->type_id);
+        $path_document = 'public/' . $folder . '/' . $cariDocument->file_doc;
+        return Storage::download($path_document, $cariDocument->title . ".pdf");
     }
 }
